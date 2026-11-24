@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>My English, My Choice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+:root {
+  --bg: #EEF1F5;
+  --surface: #FFFFFF;
+  --surface2: #F5F7FA;
+  --ink: #17202E;
+  --muted: #566074;
+  --line: #D3DAE4;
+  --accent: #2D4FD0;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E3E9FB;
+  --ok: #14764D;
+  --ok-soft: #D6F0E2;
+  --keep: #8F5400;
+  --keep-soft: #FBEACA;
+  --del: #B3261E;
+  --del-soft: #FBE0DD;
+  --c-grammar: #2D4FD0;
+  --c-punct: #0E7C86;
+  --c-word: #B4570A;
+  --c-flow: #7A3FB0;
+  --sans: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --serif: 'Lora', Georgia, 'Noto Serif KR', 'Batang', serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F141C; --surface: #18202B; --surface2: #1E2733; --ink: #E8ECF3; --muted: #9AA6BA; --line: #2C3747;
+    --accent: #8CA2FF; --accent-ink: #0E1420; --accent-soft: #222E52;
+    --ok: #5FD39C; --ok-soft: #173A2B; --keep: #F0B35A; --keep-soft: #3A2C10; --del: #FF8A80; --del-soft: #43211F;
+    --c-grammar: #8CA2FF; --c-punct: #4FD1D9; --c-word: #F0A35A; --c-flow: #C49BFF;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F141C; --surface: #18202B; --surface2: #1E2733; --ink: #E8ECF3; --muted: #9AA6BA; --line: #2C3747;
+  --accent: #8CA2FF; --accent-ink: #0E1420; --accent-soft: #222E52;
+  --ok: #5FD39C; --ok-soft: #173A2B; --keep: #F0B35A; --keep-soft: #3A2C10; --del: #FF8A80; --del-soft: #43211F;
+  --c-grammar: #8CA2FF; --c-punct: #4FD1D9; --c-word: #F0A35A; --c-flow: #C49BFF;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font: 15px/1.65 var(--sans);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+  -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+h1, h2, h3, h4, p { margin: 0; }
+h1 { font-size: clamp(1.55rem, 4.6vw, 2.25rem); line-height: 1.25; font-weight: 900; letter-spacing: -0.02em; text-wrap: balance; }
+h2 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.01em; }
+h4 { font-size: 0.78rem; font-weight: 700; color: var(--muted); letter-spacing: 0.04em; }
+button, textarea, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.en { font-family: var(--serif); font-size: 1.06rem; line-height: 1.7; }
+
+.top { display: flex; flex-direction: column; gap: 10px; }
+.brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.brand b { font-weight: 800; }
+.pill { font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--keep-soft); color: var(--keep); }
+.lead { color: var(--muted); max-width: 62ch; }
+
+.stepper { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.step { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); text-align: left; font-weight: 700; font-size: 0.9rem; min-width: 0; }
+.step i { font-style: normal; flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 0.8rem; background: var(--surface2); color: var(--muted); border: 1px solid var(--line); }
+.step[aria-current="step"] { border-color: var(--accent); background: var(--accent-soft); }
+.step[aria-current="step"] i { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.step.done i { background: var(--ok-soft); color: var(--ok); border-color: var(--ok); }
+.step:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.panel-h { display: flex; flex-direction: column; gap: 4px; }
+.panel-h p { color: var(--muted); }
+.num { flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); display: inline-grid; place-items: center; font-weight: 800; font-size: 0.9rem; }
+.title-row { display: flex; align-items: center; gap: 10px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid3 { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label, .lbl { font-weight: 700; font-size: 0.88rem; }
+.field small { color: var(--muted); font-size: 0.8rem; }
+input[type="text"], input[type="password"], textarea { width: 100%; border: 1px solid var(--line); background: var(--surface2); border-radius: 10px; padding: 10px 12px; }
+textarea { resize: vertical; }
+textarea.en { min-height: 220px; }
+textarea:disabled { opacity: 0.6; }
+
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface2); }
+.seg button { border: 0; background: transparent; padding: 8px 14px; font-weight: 700; font-size: 0.88rem; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.check { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+.check input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+.btn { border: 0; border-radius: 999px; padding: 11px 22px; font-weight: 800; background: var(--accent); color: var(--accent-ink); }
+.btn.ghost { background: var(--surface2); color: var(--ink); border: 1px solid var(--line); font-weight: 700; padding: 9px 16px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.note { color: var(--muted); font-size: 0.85rem; }
+.status { min-height: 1.4em; color: var(--accent); font-weight: 700; font-size: 0.9rem; }
+.dots span { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-right: 4px; animation: blink 1s infinite; }
+.dots span:nth-child(2) { animation-delay: 0.15s; } .dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes blink { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .dots span { animation: none; } }
+
+.aibox { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--surface2); }
+.aibox h4 { margin-bottom: 2px; }
+.prog { display: flex; align-items: center; gap: 12px; }
+.bar { flex: 1; height: 8px; border-radius: 999px; background: var(--surface2); border: 1px solid var(--line); overflow: hidden; }
+.bar > div { height: 100%; width: 0; background: var(--ok); transition: width 0.3s; }
+.prog b { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.units { display: flex; flex-direction: column; gap: 14px; }
+.unit { border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 14px; background: var(--surface); min-width: 0; }
+.unit.done { background: var(--surface2); }
+.unit-h { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.unit-h .num { background: var(--surface2); color: var(--ink); border: 1px solid var(--line); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; min-width: 0; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 0.76rem; font-weight: 700; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); white-space: nowrap; }
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--dot, var(--accent)); }
+.chip.grammar { --dot: var(--c-grammar); } .chip.punct { --dot: var(--c-punct); } .chip.word { --dot: var(--c-word); } .chip.flow { --dot: var(--c-flow); }
+.state { font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--surface2); color: var(--muted); border: 1px solid var(--line); }
+.unit.done.agree .state { background: var(--ok-soft); color: var(--ok); border-color: var(--ok); }
+.unit.done.keep .state { background: var(--keep-soft); color: var(--keep); border-color: var(--keep); }
+.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.col { display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); }
+.col.new { border-color: var(--ok); }
+.unit.done .col { background: var(--surface); }
+.col p { overflow-wrap: anywhere; }
+mark { background: none; color: inherit; border-radius: 4px; padding: 0 2px; }
+mark.del { background: var(--del-soft); color: var(--del); text-decoration: line-through; }
+mark.add { background: var(--ok-soft); color: var(--ok); font-weight: 600; }
+.why { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 0.9rem; }
+.why li { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.why b { font-weight: 700; }
+.easy { color: var(--muted); font-family: var(--serif); font-size: 0.9rem; }
+body.easy-off .easy { display: none; }
+.decide { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; }
+.choice { display: flex; flex-direction: column; gap: 8px; }
+.choice button { border: 1px solid var(--line); background: var(--surface2); border-radius: 10px; padding: 9px 18px; font-weight: 700; text-align: left; }
+.choice button[aria-pressed="true"][data-c="agree"] { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.choice button[aria-pressed="true"][data-c="keep"] { background: var(--keep-soft); border-color: var(--keep); color: var(--keep); }
+.reasonbox { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.reasonbox textarea { min-height: 64px; }
+.starters { display: flex; gap: 6px; flex-wrap: wrap; }
+.starters button { border: 1px dashed var(--line); background: transparent; border-radius: 999px; padding: 3px 11px; font-size: 0.8rem; }
+.starters button:hover { border-color: var(--accent); }
+.lockinfo { border: 1px solid var(--keep); background: var(--keep-soft); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.lockinfo b { font-weight: 800; color: var(--keep); }
+.lockinfo ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 2px; }
+.btn[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+.unit.flash { outline: 3px solid var(--keep); outline-offset: 3px; }
+.qmsg { font-size: 0.84rem; min-height: 1.3em; }
+.qmsg.ok { color: var(--ok); font-weight: 700; } .qmsg.weak { color: var(--keep); font-weight: 700; } .qmsg.checking { color: var(--accent); }
+.count { font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.count.ok { color: var(--ok); font-weight: 700; }
+
+.flowbox { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.flowbox h3 { font-size: 1rem; font-weight: 800; }
+.flowlist { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.flowlist li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 10px; background: var(--surface2); border: 1px solid var(--line); min-width: 0; }
+.flowlist b { font-weight: 800; }
+.fs { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 0.8rem; }
+.fs.ok { background: var(--ok-soft); color: var(--ok); } .fs.warn { background: var(--keep-soft); color: var(--keep); }
+.topicbox { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: var(--surface2); display: flex; flex-direction: column; gap: 8px; }
+.topic { font-size: 1.3rem; font-weight: 600; }
+.tform { display: flex; flex-direction: column; gap: 14px; }
+.inline { display: flex; gap: 8px; }
+.inline input { flex: 1; min-width: 0; }
+.srow { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.tbtn { border: 1px solid var(--line); background: var(--surface2); border-radius: 8px; padding: 4px 10px; font-size: 0.82rem; font-weight: 700; }
+.tbtn.danger { color: var(--del); border-color: var(--del); }
+.first { background: var(--accent-soft); border-radius: 10px; padding: 10px 14px; font-weight: 700; }
+.guide { border: 1px solid var(--line); border-radius: 12px; background: var(--surface2); padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.guide summary { cursor: pointer; font-weight: 800; }
+.guide[open] summary { margin-bottom: 4px; }
+.gcols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.gcard { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.gcard p { margin: 0; }
+.gtag { align-self: flex-start; font-size: 0.8rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
+.gtag.s1 { background: var(--accent-soft); color: var(--accent); }
+.gtag.s2 { background: var(--ok-soft); color: var(--ok); }
+.gtag.s3 { background: var(--keep-soft); color: var(--keep); }
+.gex { background: var(--surface2); border-radius: 8px; padding: 8px 10px; font-size: 0.98rem; }
+.gstart { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.gstart .note { flex-basis: 100%; }
+.gstart button { border: 1px dashed var(--line); background: transparent; border-radius: 999px; padding: 3px 11px; font-family: var(--serif); font-size: 0.9rem; }
+.gstart button:hover { border-color: var(--accent); }
+@media (max-width: 720px) { .gcols { grid-template-columns: 1fr; } }
+.gq { display: flex; flex-direction: column; gap: 4px; font-size: 0.9rem; }
+.gq ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 2px; }
+.gframe { background: var(--surface2); border-radius: 8px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; font-size: 0.9rem; }
+.gframe p { margin: 0; }
+.vocab { display: flex; flex-wrap: wrap; gap: 6px; }
+.vocab span { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 2px 10px; font-size: 0.82rem; }
+.guide .check { font-size: 0.9rem; }
+
+.tally { display: flex; gap: 8px; flex-wrap: wrap; }
+.tally span { font-weight: 700; font-size: 0.85rem; padding: 4px 12px; border-radius: 999px; }
+.t-ok { background: var(--ok-soft); color: var(--ok); } .t-keep { background: var(--keep-soft); color: var(--keep); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.82rem; color: var(--muted); }
+.preview { border: 1px solid var(--line); border-radius: 12px; padding: 16px; background: var(--surface2); display: flex; flex-direction: column; gap: 12px; }
+.kept { border-bottom: 2px dotted var(--keep); }
+.final-box { display: flex; flex-direction: column; gap: 8px; }
+.submit-box { border: 2px dashed var(--accent); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.submit-box .pill2 { align-self: flex-start; font-size: 0.78rem; font-weight: 800; padding: 3px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.done-msg { padding: 12px 14px; border-radius: 12px; background: var(--ok-soft); color: var(--ok); font-weight: 700; }
+
+.coach { display: flex; flex-direction: column; gap: 14px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.card { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px; background: var(--surface); min-width: 0; }
+.card h3 { font-size: 0.98rem; font-weight: 800; }
+.card.good { border-color: var(--ok); } .card.focus { border-color: var(--accent); } .card.recheck { border-color: var(--keep); }
+.card .tagline { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.04em; color: var(--muted); }
+.q { display: flex; flex-direction: column; gap: 8px; }
+.q .opts { display: flex; gap: 8px; flex-wrap: wrap; }
+.q .opts button { border: 1px solid var(--line); background: var(--surface2); border-radius: 10px; padding: 6px 14px; font-family: var(--serif); }
+.q .opts button.right { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.q .opts button.wrong { background: var(--del-soft); border-color: var(--del); color: var(--del); }
+.q .fb { font-size: 0.85rem; min-height: 1.2em; }
+.bars { display: flex; flex-direction: column; gap: 8px; }
+.brow { display: grid; grid-template-columns: 9em 1fr 3.2em; gap: 10px; align-items: center; font-size: 0.88rem; }
+.btrack { display: flex; height: 14px; border-radius: 4px; overflow: hidden; background: var(--surface2); border: 1px solid var(--line); }
+.btrack i { display: block; height: 100%; }
+.btrack .a { background: var(--ok); } .btrack .k { background: var(--keep); }
+.brow span:last-child { font-variant-numeric: tabular-nums; text-align: right; }
+.tw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.88rem; min-width: 560px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.04em; }
+
+@media (max-width: 720px) {
+  .stepper { grid-template-columns: 1fr 1fr; }
+  .grid2, .grid3, .cmp, .decide, .flowlist { grid-template-columns: 1fr; }
+  .choice { flex-direction: row; }
+  .choice button { flex: 1; text-align: center; }
+  .panel { padding: 16px; }
+  .brow { grid-template-columns: 7em 1fr 2.6em; }
+}
+
+.chip.spell { --dot: var(--keep); }
+.foot { display: flex; justify-content: flex-end; }
+.linkbtn { background: none; border: 0; color: var(--muted); text-decoration: underline; padding: 6px; font-size: 0.85rem; }
+.err { color: var(--del); font-weight: 700; }
+.good { color: var(--ok); font-weight: 700; }
+.tbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.pinrow { display: flex; gap: 8px; max-width: 360px; }
+.pinrow input { flex: 1; min-width: 0; }
+a.sheetlink { color: var(--accent); font-weight: 700; }
+.card.err-card { border-color: var(--del); }
+select { border: 1px solid var(--line); background: var(--surface2); color: var(--ink); border-radius: 10px; padding: 9px 12px; font: inherit; max-width: 100%; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><b>영어 고쳐쓰기</b></div>
+    <h1>My English.<br>My choice.</h1>
+    <p class="lead">영어로 먼저 써 보고, AI의 제안을 하나씩 살펴보세요. 더 나은 표현은 받아들이고, 내 뜻과 다르면 이유를 적어 보세요. 최종 글과 피드백 판단을 선생님께 제출합니다.</p>
+  </header>
+
+  <nav class="stepper" aria-label="진행 단계">
+    <button class="step" data-s="1"><i>1</i><span>글 넣기</span></button>
+    <button class="step" data-s="2"><i>2</i><span>고친 곳마다 판단하기</span></button>
+    <button class="step" data-s="3"><i>3</i><span>정리해서 제출하기</span></button>
+    <button class="step" data-s="4"><i>4</i><span>스스로 공부하기</span></button>
+  </nav>
+
+  <!-- 선생님: 로그인 -->
+  <section class="panel tp" id="pl" hidden>
+    <div class="panel-h"><div class="title-row"><span class="num">T</span><h2>선생님 화면</h2></div><p>선생님 PIN을 입력해요.</p></div>
+    <form id="loginForm" class="tform" autocomplete="off">
+      <div class="pinrow"><input type="password" id="pin" aria-label="선생님 PIN" placeholder="PIN"><button class="btn" type="submit">들어가기</button></div>
+      <span class="status" id="loginMsg" role="status" aria-live="polite"></span>
+    </form>
+    <div class="actions"><button class="btn ghost" type="button" data-exit="1">← 학생 화면으로</button></div>
+  </section>
+
+  <!-- 선생님: 코드와 제출 현황 -->
+  <section class="panel tp" id="pt" hidden>
+    <div class="tbar"><div class="title-row"><span class="num">T</span><h2>입장 코드와 글감 정하기</h2></div><div class="actions"><a class="sheetlink" id="sheetLink" target="_blank" rel="noopener">구글 시트에서 전체 보기</a><button class="btn ghost" type="button" data-exit="1">← 학생 화면으로</button></div></div>
+    <p class="note">코드마다 글감과 수업 설정을 정해 두면, 학생이 코드를 입력할 때 글감이 자동으로 나와요.</p>
+    <form id="codeForm" class="tform" autocomplete="off">
+      <div class="grid2">
+        <div class="field"><label for="tcode">입장 코드</label><div class="inline"><input type="text" id="tcode" placeholder="예: ENG-9A1"><button type="button" class="btn ghost" id="genCode">자동 만들기</button></div></div>
+        <div class="field"><label for="tcls">반 · 수업 이름</label><input type="text" id="tcls" placeholder="예: 2학년 3반"></div>
+      </div>
+      <div class="field"><label for="ttopic">글감 (Writing prompt)</label><input type="text" id="ttopic" placeholder="예: My Smart Media Life"></div>
+      <div class="field"><label for="thint">학생에게 보일 안내</label><small>분량이나 조건을 한국어나 영어로 적어요</small><textarea id="thint" rows="2" placeholder="예: 내 미디어 생활을 서론·본론·결론으로 나누어 써 보세요. 5문장 이상 쓰면 좋아요."></textarea></div>
+      <div class="srow">
+        <span class="lbl">피드백 단위</span>
+        <div class="seg" role="group" aria-label="피드백 단위">
+          <button type="button" data-tu="sentence" aria-pressed="true">문장마다</button>
+          <button type="button" data-tu="paragraph" aria-pressed="false">문단마다</button>
+        </div>
+        <label class="check"><input type="checkbox" id="teasy" checked> 쉬운 영어 설명 함께 보기</label>
+      </div>
+      <div class="actions"><button class="btn" id="saveCode" type="submit">코드 만들기</button><button class="btn ghost" id="cancelEdit" type="button" hidden>수정 취소</button><span class="status" id="tmsg" role="status" aria-live="polite"></span></div>
+    </form>
+    <div>
+      <h3>만들어 둔 코드</h3>
+      <div class="tw" style="margin-top:8px"><table id="codeTable"></table></div>
+    </div>
+    <div>
+      <h3>제출 현황</h3>
+      <div class="actions" style="margin:8px 0">
+        <select id="subCode" aria-label="코드 선택"></select>
+        <button class="btn ghost" type="button" id="loadSubs">불러오기</button>
+        <span class="status" id="subMsg" role="status" aria-live="polite"></span>
+      </div>
+      <div class="tw"><table id="subTable"></table></div>
+    </div>
+  </section>
+
+  <!-- 1단계 -->
+  <section class="panel sp" id="p1">
+    <div class="panel-h"><div class="title-row"><span class="num">1</span><h2>영어로 먼저 써 보기</h2></div></div>
+    <div class="grid3">
+      <div class="field"><label for="code">입장 코드</label><small>선생님이 알려 준 코드</small><input type="text" id="code" autocomplete="off" autocapitalize="characters" placeholder="입장 코드"><span class="note" id="codeMsg" role="status" aria-live="polite"></span></div>
+      <div class="field"><label for="sid">학번</label><small>예: 2315</small><input type="text" id="sid" inputmode="numeric" autocomplete="off" placeholder="학번"></div>
+      <div class="field"><label for="sname">이름</label><small>&nbsp;</small><input type="text" id="sname" autocomplete="off" placeholder="이름"></div>
+    </div>
+    <div class="field"><span class="lbl">글감 (Writing prompt)</span><div class="topicbox" id="topicBox" aria-live="polite"><p class="note">입장 코드를 입력하면 글감이 자동으로 나와요.</p></div></div>
+    <div class="field">
+      <label for="draft">내가 쓴 영어 글</label>
+      <p class="first">AI를 열기 전에 내 생각을 영어로 먼저 적어요. 실수해도 괜찮아요. 초안이 나의 출발점이에요.</p>
+      <details class="guide" open>
+        <summary>쓰기 도움: 서론 · 본론 · 결론으로 나누어 써요</summary>
+        <p class="note">이번 주제는 “My Smart Media Life”예요. 먼저 한국어로 생각해 보고, 문장 틀을 보며 내 이야기를 영어로 써 봐요. 예시는 한 문장씩만 있고 서로 이어지지 않아요. 내 글은 내가 써요.</p>
+        <div class="gcols">
+          <div class="gcard">
+            <span class="gtag s1">서론 · Introduction</span>
+            <p>내가 어떤 미디어를 쓰는지 소개해요. (1~2문장)</p>
+            <div class="gq"><b>먼저 생각해 봐요</b><ul><li>내가 자주 쓰는 미디어는 무엇인가요?</li><li>언제, 어디서 가장 많이 쓰나요?</li></ul></div>
+            <div class="gframe"><b>문장 틀</b><p class="en">I often use ____ .</p><p class="en">My favorite media is ____ .</p></div>
+            <p class="gex en"><span class="note">예시</span> I often use YouTube after school.</p>
+            <div class="gstart"><span class="note">시작 표현 · 눌러서 글에 넣어요</span>
+              <button type="button" data-sec="intro" data-ins="I often use ">I often use…</button>
+              <button type="button" data-sec="intro" data-ins="My favorite media is ">My favorite media is…</button></div>
+          </div>
+          <div class="gcard">
+            <span class="gtag s2">본론 · Body</span>
+            <p>좋은 점과 조심할 점, 나만의 방법을 써요. (2~3문장)</p>
+            <div class="gq"><b>먼저 생각해 봐요</b><ul><li>그 미디어로 무엇을 하고, 어떤 점이 좋은가요?</li><li>조심해야 할 점은 무엇인가요? (시간, 눈 건강, 가짜 뉴스 등)</li><li>스마트하게 쓰는 나만의 방법은 무엇인가요?</li></ul></div>
+            <div class="gframe"><b>문장 틀</b><p class="en">I use ____ to ____ .</p><p class="en">It helps me ____ , but ____ .</p><p class="en">To use it wisely, I ____ .</p></div>
+            <p class="gex en"><span class="note">예시</span> Messenger helps me talk with friends, but I check it too much.</p>
+            <div class="gstart"><span class="note">시작 표현 · 눌러서 글에 넣어요</span>
+              <button type="button" data-sec="body" data-ins="I use ">I use…</button>
+              <button type="button" data-sec="body" data-ins="It helps me ">It helps me…</button>
+              <button type="button" data-sec="body" data-ins="but ">but…</button>
+              <button type="button" data-sec="body" data-ins="To use it wisely, I ">To use it wisely, I…</button></div>
+          </div>
+          <div class="gcard">
+            <span class="gtag s3">결론 · Conclusion</span>
+            <p>앞으로의 다짐으로 마무리해요. (1~2문장)</p>
+            <div class="gq"><b>먼저 생각해 봐요</b><ul><li>앞으로 미디어를 어떻게 쓰고 싶나요?</li><li>친구에게 해 주고 싶은 한마디는 무엇인가요?</li></ul></div>
+            <div class="gframe"><b>문장 틀</b><p class="en">From now on, I will ____ .</p><p class="en">I want to be a smart media user because ____ .</p></div>
+            <p class="gex en"><span class="note">예시</span> From now on, I will turn off my phone at 10 p.m.</p>
+            <div class="gstart"><span class="note">시작 표현 · 눌러서 글에 넣어요</span>
+              <button type="button" data-sec="end" data-ins="From now on, I will ">From now on, I will…</button>
+              <button type="button" data-sec="end" data-ins="I want to be a smart media user because ">I want to be a smart media user because…</button></div>
+          </div>
+        </div>
+        <div class="gq">
+          <b>쉬운 낱말 도움</b>
+          <div class="vocab"><span>YouTube 유튜브</span><span>social media SNS</span><span>messenger 메신저</span><span>game 게임</span><span>AI chatbot AI 챗봇</span><span>screen time 화면 보는 시간</span><span>fake news 가짜 뉴스</span><span>helpful 도움이 되는</span><span>careful 조심하는</span><span>timer 타이머</span></div>
+        </div>
+        <div class="gq">
+          <b>다 쓴 뒤 스스로 점검 (AI 제안을 열기 전에)</b>
+          <label class="check"><input type="checkbox"> 서론: 내가 쓰는 미디어를 소개했나요?</label>
+          <label class="check"><input type="checkbox"> 본론: 좋은 점과 조심할 점을 모두 썼나요?</label>
+          <label class="check"><input type="checkbox"> 결론: 앞으로의 다짐을 썼나요?</label>
+          <label class="check"><input type="checkbox"> 소리 내어 읽고, 마음에 안 드는 문장을 내 말로 한 번 고쳐 썼나요?</label>
+          <p class="note">AI는 고칠 곳을 알려 줄 뿐, 내 글을 대신 써 주지 않아요. 고쳐 쓰는 것은 내 몫이에요.</p>
+        </div>
+      </details>
+      <small>한글·워드 파일이나 메모장에서 복사해 붙여 넣어도 돼요 · 3,000자까지</small>
+      <textarea id="draft" class="en" spellcheck="false" maxlength="3000" placeholder="서론 → 본론 → 결론 순서로 써 보세요. 위의 시작 표현을 눌러 시작해도 좋아요."></textarea>
+      <div class="actions"><span class="count" id="draftCount">0 / 3,000자</span></div>
+    </div>
+    <div class="actions"><button class="btn" id="go" type="button" aria-disabled="true" aria-describedby="goNote">AI 제안 열어 보기</button><span class="note" id="goNote" role="status" aria-live="polite"></span></div>
+    <span class="status" id="goStatus" role="status" aria-live="polite"></span>
+  </section>
+
+  <!-- 2단계 -->
+  <section class="panel sp" id="p2" hidden>
+    <div class="panel-h"><div class="title-row"><span class="num">2</span><h2>고친 곳마다 판단하기</h2></div><p>고친 곳을 하나씩 읽고 동의 또는 동의 안 함을 고른 뒤, 그렇게 판단한 까닭을 10자 이상 적어요.</p></div>
+    <div class="aibox"><h4>AI의 한마디</h4><p><span id="overall"></span> <span class="note" id="untouched"></span></p></div>
+    <div class="flowbox">
+      <h3>글의 흐름 한눈에 보기</h3>
+      <p class="note">AI가 글 전체를 읽고 살펴봤어요. △ 항목은 AI가 대신 써 주지 않아요. 내 글에서 직접 찾아 고쳐 써 봐요.</p>
+      <ul class="flowlist" id="flowList"></ul>
+    </div>
+    <div class="lockinfo" role="note">
+      <b>다음 단계는 이렇게 열려요</b>
+      <p>고친 곳을 모두 판단해야 “정리하러 가기” 버튼이 열려요. 한 곳이라도 아래 세 가지를 마치지 않으면 닫혀 있어요.</p>
+      <ul><li>동의 또는 동의 안 함을 골랐나요?</li><li>그렇게 판단한 까닭을 10자 이상 적었나요?</li><li>AI가 읽었을 때 구체적인 까닭인가요? 막연하면 한 번 더 물어봐요.</li></ul>
+      <p class="note">남은 곳은 버튼 옆에 번호로 알려 줘요. 닫힌 버튼을 누르면 아직 끝내지 못한 곳으로 이동해요.</p>
+    </div>
+    <div class="prog"><div class="bar"><div id="barFill"></div></div><b id="progTxt">0 / 0</b></div>
+    <div class="units" id="units"></div>
+    <div class="actions"><button class="btn ghost" data-back="1" type="button">← 글 다시 넣기</button><button class="btn" id="to3" type="button" aria-disabled="true" aria-describedby="to3note">정리하러 가기</button><span class="note" id="to3note" role="status" aria-live="polite">모든 곳을 판단하면 열려요.</span></div>
+  </section>
+
+  <!-- 3단계 -->
+  <section class="panel sp" id="p3" hidden>
+    <div class="panel-h"><div class="title-row"><span class="num">3</span><h2>정리해서 제출하기</h2></div><p>내가 동의한 곳만 바뀌어 들어간 글이에요. 다시 읽어 보고, 더 고치고 싶은 곳은 아래 칸에서 직접 고친 뒤 제출해요.</p></div>
+    <div class="tally" id="tally"></div>
+    <div class="legend"><span><mark class="add">초록 글씨</mark> 동의해서 바꾼 곳</span><span><span class="kept">점선 밑줄</span> 동의하지 않아 내 표현을 지킨 곳</span></div>
+    <div class="preview en" id="preview"></div>
+    <div class="final-box">
+      <h3>최종 글</h3><small class="note">내 손으로 한 번 더 다듬어요</small>
+      <div class="aibox"><h4>다시 써 볼 때 이렇게 해 봐요</h4><ul class="why"><li>① 최종 글을 소리 내어 읽고, 걸리는 문장 하나를 골라요.</li><li>② 2단계의 △ 항목이나 “동의 안 함”으로 남긴 곳을 내 말로 다시 써 봐요.</li><li>③ 새 낱말이나 연결어를 넣을 때는 내가 직접 골라 써요. AI가 대신 써 주지 않아요.</li></ul></div>
+      <textarea id="finalText" class="en" spellcheck="false" maxlength="6000"></textarea>
+      <div class="actions"><button class="btn ghost" id="resetFinal" type="button">처음 상태로 되돌리기</button><span class="note">내가 직접 고친 내용은 지워지고, 2단계에서 판단한 대로 다시 채워져요.</span></div>
+    </div>
+    <div class="submit-box">
+      <span class="pill2">마지막 단계</span>
+      <label class="check"><input type="checkbox" id="readAloud"> 최종 글을 처음부터 끝까지 소리 내어 읽어 봤어요</label>
+      <div class="actions"><button class="btn ghost" data-back="2" type="button">← 판단 다시 보기</button><button class="btn" id="submit" type="button" aria-disabled="true" aria-describedby="submitNote">선생님께 제출하기</button><span class="note" id="submitNote" role="status" aria-live="polite">소리 내어 읽어 보면 제출할 수 있어요.</span></div>
+      <span class="status" id="submitStatus" role="status" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- 4단계 -->
+  <section class="panel sp" id="p4" hidden>
+    <div class="panel-h"><div class="title-row"><span class="num">4</span><h2>스스로 공부하기</h2></div><p>제출한 최종 글을 AI가 다시 읽고, 어느 부분을 어떻게 더 연습하면 좋을지 알려 줘요.</p></div>
+    <div class="done-msg">선생님께 제출했어요.</div>
+    <div class="actions"><button class="btn ghost" data-back="3" type="button">← 정리하기로 돌아가기</button></div>
+    <div class="actions"><span class="lbl">AI의 설명 강도</span>
+      <div class="seg" role="group" aria-label="설명 강도">
+        <button type="button" data-i="weak" aria-pressed="false">약하게</button>
+        <button type="button" data-i="normal" aria-pressed="true">보통</button>
+        <button type="button" data-i="strong" aria-pressed="false">자세히</button>
+      </div>
+    </div>
+    <div class="coach" id="coach"></div>
+    <div>
+      <h3>내가 판단한 결과, 유형별로 보기</h3>
+      <div class="bars" id="bars" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <div class="foot"><button class="linkbtn" id="toTeacher" type="button">선생님 화면</button></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var CLS = { 'Grammar': 'grammar', 'Punctuation': 'punct', 'Word choice': 'word', 'Cohesion': 'flow', 'Spelling': 'spell' };
+  var FLOW_LABEL = { topic: '주제문', order: '시간·순서', linking: '연결어', ending: '마무리' };
+  var state = { step: 1, max: 1, unit: 'sentence', model: null, dec: {}, edited: false, submitted: false, intensity: 'normal', cur: null, coach: null, coachErr: '', busy: false };
+  var timers = {};
+
+  function run(fn, args, ok, fail) {
+    fetch('/api/index', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fn: fn, args: args })
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data && data.error && data.ok === false && fn.indexOf('teacher') === 0) {
+          if (fail) fail(data.error);
+          return;
+        }
+        if (ok) ok(data);
+      })
+      .catch(function (err) {
+        var m = err && err.message ? String(err.message) : '서버에 연결하지 못했어요. 잠시 뒤 다시 해 봐요.';
+        if (fail) fail(m);
+      });
+  }
+
+  function diff(a, b) {
+    var A = a.split(/\s+/).filter(Boolean), B = b.split(/\s+/).filter(Boolean), n = A.length, m = B.length, i, j;
+    var L = []; for (i = 0; i <= n; i++) L.push(new Array(m + 1).fill(0));
+    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--) L[i][j] = A[i] === B[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+    var oa = [], ob = []; i = 0; j = 0;
+    while (i < n && j < m) {
+      if (A[i] === B[j]) { oa.push({ w: A[i], m: false }); ob.push({ w: B[j], m: false }); i++; j++; }
+      else if (L[i + 1][j] >= L[i][j + 1]) { oa.push({ w: A[i], m: true }); i++; }
+      else { ob.push({ w: B[j], m: true }); j++; }
+    }
+    while (i < n) oa.push({ w: A[i++], m: true });
+    while (j < m) ob.push({ w: B[j++], m: true });
+    return { a: oa, b: ob };
+  }
+  function diffPair(o, r) {
+    if (o) return diff(o, r);
+    return { a: [], b: r.split(/\s+/).filter(Boolean).map(function (w) { return { w: w, m: true }; }) };
+  }
+  function toHtml(tokens, cls) { return tokens.map(function (t) { return t.m ? '<mark class="' + cls + '">' + esc(t.w) + '</mark>' : esc(t.w); }).join(' '); }
+
+  function setStep(n) {
+    state.step = n;
+    $$('.sp').forEach(function (p) { p.hidden = p.id !== 'p' + n; });
+    $$('.step').forEach(function (b) {
+      var s = +b.dataset.s;
+      b.disabled = s > state.max;
+      if (s === n) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+      b.classList.toggle('done', (s < state.max && s !== n) || (s === 4 && state.submitted && n !== 4));
+    });
+    if (n === 3) renderStep3();
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+  $$('.step').forEach(function (b) { b.addEventListener('click', function () { if (!b.disabled) setStep(+b.dataset.s); }); });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-back]');
+    if (b) setStep(+b.dataset.back);
+  });
+
+  var codeTimer = null;
+  function missing() {
+    var m = [], d = $('#draft').value.trim();
+    if (!state.cur) m.push({ id: 'code', t: '입장 코드' });
+    if (!$('#sid').value.trim()) m.push({ id: 'sid', t: '학번' });
+    if (!$('#sname').value.trim()) m.push({ id: 'sname', t: '이름' });
+    if (!/[A-Za-z]{2,}/.test(d)) m.push({ id: 'draft', t: '영어로 쓴 글' });
+    else if (d.length < 20) m.push({ id: 'draft', t: '20자 이상의 글' });
+    return m;
+  }
+  function refreshStart() {
+    var m = missing();
+    $('#go').setAttribute('aria-disabled', String(m.length > 0));
+    $('#goNote').textContent = m.length ? '아직 필요한 것: ' + m.map(function (x) { return x.t; }).join(', ') : '준비됐어요. 눌러서 AI의 제안을 열어 봐요.';
+  }
+  function draftCount() { $('#draftCount').textContent = $('#draft').value.length.toLocaleString() + ' / 3,000자'; }
+  ['sid', 'sname', 'draft'].forEach(function (id) { $('#' + id).addEventListener('input', function () { draftCount(); refreshStart(); }); });
+
+  function showAssignment(c) {
+    var box = $('#topicBox');
+    if (!c) { box.innerHTML = '<p class="note">입장 코드를 입력하면 글감이 자동으로 나와요.</p>'; return; }
+    box.innerHTML = '<p class="en topic">' + esc(c.topic) + '</p>' + (c.hint ? '<p>' + esc(c.hint) + '</p>' : '') +
+      '<div class="chips"><span class="chip">피드백 단위 · ' + (c.unit === 'paragraph' ? '문단마다' : '문장마다') + '</span><span class="chip">쉬운 영어 설명 · ' + (c.easy ? '켜짐' : '꺼짐') + '</span></div>';
+    document.body.classList.toggle('easy-off', !c.easy);
+  }
+  $('#code').addEventListener('input', function () {
+    var raw = this.value, msg = $('#codeMsg');
+    clearTimeout(codeTimer);
+    state.cur = null; showAssignment(null); refreshStart();
+    if (raw.replace(/\s+/g, '').length < 3) { msg.textContent = ''; return; }
+    msg.style.color = 'var(--muted)'; msg.textContent = '코드를 확인하고 있어요…';
+    codeTimer = setTimeout(function () {
+      run('getAssignment', [raw], function (r) {
+        if ($('#code').value !== raw) return;
+        if (r && r.ok) {
+          state.cur = r; showAssignment(r);
+          msg.style.color = 'var(--ok)'; msg.textContent = '✓ ' + (r.cls || '수업') + ' 코드예요.';
+        } else {
+          msg.style.color = 'var(--del)'; msg.textContent = '없는 코드예요. 선생님께 다시 확인해요.';
+        }
+        refreshStart();
+      }, function (m) { msg.style.color = 'var(--del)'; msg.textContent = m; });
+    }, 450);
+  });
+
+  $('#go').addEventListener('click', function () {
+    var m = missing(), st = $('#goStatus');
+    if (m.length) { var t = $('#' + m[0].id); if (t) t.focus(); return; }
+    if (state.busy) return;
+    state.busy = true;
+    $('#go').setAttribute('aria-disabled', 'true');
+    st.className = 'status';
+    st.innerHTML = '<span class="dots"><span></span><span></span><span></span></span> AI가 글을 읽고 고칠 곳을 찾고 있어요. 글이 길면 1분쯤 걸려요. 화면을 닫지 말고 기다려 주세요.';
+    run('analyze', [{ code: state.cur.code, sid: $('#sid').value.trim(), draft: $('#draft').value }], function (r) {
+      state.busy = false; refreshStart();
+      if (!r || !r.ok) { st.className = 'status err'; st.textContent = (r && r.error) || 'AI가 응답하지 못했어요. 다시 눌러 봐요.'; return; }
+      st.textContent = '';
+      state.model = { items: r.items || [], structure: r.structure || [] };
+      state.unit = r.unit || state.cur.unit; state.overall = r.overall || ''; state.flow = r.flow || [];
+      state.dec = {}; state.edited = false; state.submitted = false; state.coach = null; state.coachErr = '';
+      state.max = 2;
+      renderStep2();
+      setStep(2);
+    }, function (msg) { state.busy = false; refreshStart(); st.className = 'status err'; st.textContent = msg; });
+  });
+
+  var STARTERS = {
+    agree: ['I agree because ', '규칙을 다시 확인해 보니 ', '고친 표현이 더 자연스러워요. 왜냐하면 '],
+    keep: ['I want to keep my sentence because ', '내 표현도 뜻이 통해요. 왜냐하면 ', '내가 쓰려던 뜻은 ']
+  };
+  function cardHtml(it, i) {
+    var d = diffPair(it.o, it.r);
+    var chips = it.tags.map(function (t) { return '<span class="chip ' + (CLS[t.cat] || 'word') + '">' + esc(t.cat) + ' · ' + esc(t.sub) + '</span>'; }).join('');
+    var why = it.tags.map(function (t) { return '<li><b>' + esc(t.cat) + ' · ' + esc(t.sub) + '</b><span>' + esc(t.ko) + '</span>' + (t.en ? '<span class="easy">' + esc(t.en) + '</span>' : '') + '</li>'; }).join('');
+    return '<article class="unit" id="u' + i + '" data-i="' + i + '">' +
+      '<div class="unit-h"><span class="num">' + (i + 1) + '</span><div class="chips">' + chips + '</div><span class="state" id="st' + i + '">판단 전</span></div>' +
+      '<div class="cmp"><div class="col"><h4>내가 쓴 ' + (state.unit === 'paragraph' ? '문단' : '문장') + '</h4>' + (it.o ? '<p class="en">' + toHtml(d.a, 'del') + '</p>' : '<p class="note">원래 글에는 없어요. 새 문장을 더하자는 제안이에요.</p>') + '</div>' +
+      '<div class="col new"><h4>AI가 고친 표현</h4><p class="en">' + toHtml(d.b, 'add') + '</p></div></div>' +
+      '<ul class="why">' + why + '</ul>' +
+      '<div class="decide"><div class="choice" role="group" aria-label="동의 여부"><button type="button" data-c="agree" aria-pressed="false">✓ 동의</button><button type="button" data-c="keep" aria-pressed="false">✕ 동의 안 함</button></div>' +
+      '<div class="reasonbox"><label for="r' + i + '" class="lbl">그렇게 판단한 까닭</label><textarea id="r' + i + '" disabled placeholder="먼저 동의 여부를 골라요." maxlength="300"></textarea><div class="starters" id="sg' + i + '"></div><div class="count" id="ct' + i + '">0 / 10자</div><div class="qmsg" id="qm' + i + '" aria-live="polite"></div></div></div>' +
+      '</article>';
+  }
+  function renderStep2() {
+    var items = state.model.items;
+    $('#overall').textContent = state.overall || '';
+    $('#flowList').innerHTML = (state.flow || []).map(function (f) {
+      var ok = f.status === 'ok';
+      return '<li><span class="fs ' + (ok ? 'ok' : 'warn') + '">' + (ok ? '✓' : '△') + '</span><div><b>' + esc(FLOW_LABEL[f.key] || f.key) + '</b><p>' + esc(f.ko) + '</p>' + (f.en ? '<p class="easy">' + esc(f.en) + '</p>' : '') + '</div></li>';
+    }).join('');
+    $('#units').innerHTML = items.length ? items.map(cardHtml).join('') : '<div class="card good"><span class="tagline">AI의 확인</span><h3>고칠 곳을 찾지 못했어요</h3><p>글이 이미 잘 쓰여 있어요. 그대로 정리하러 가요.</p></div>';
+    var same = 0;
+    state.model.structure.forEach(function (p) { p.forEach(function (s) { if (s.item < 0) same++; }); });
+    $('#untouched').textContent = same ? '(AI가 고치지 않은 ' + (state.unit === 'paragraph' ? '문단' : '문장') + ': ' + same + '개)' : '';
+    items.forEach(function (_, i) { updateCard(i); });
+    updateProgress();
+  }
+
+  function localWeak(text, choice) {
+    var compact = String(text || '').replace(/\s+/g, '');
+    var distinct = {}; compact.split('').forEach(function (ch) { distinct[ch] = 1; });
+    var hasWords = /[가-힣]{2,}|[A-Za-z]{3,}/.test(text || '');
+    var vague = /^(그냥|몰라|몰라요|모르겠어요?|좋아서|싫어서|아무거나|맞는것같아요?|idk|idontknow|ok|okay|yes|no)\W*$/i.test(compact);
+    if (!hasWords || Object.keys(distinct).length < 5) return '글자만 채운 것 같아요. 어떤 낱말이나 규칙 때문인지 말로 적어 봐요.';
+    if (vague) return '이 말만으로는 알기 어려워요. ' + (choice === 'keep' ? '내가 쓰려던 뜻이 무엇인지' : '어떤 규칙이나 표현 때문인지') + ' 한 줄 더 적어 봐요.';
+    return null;
+  }
+  function scheduleCheck(i) {
+    var d = state.dec[i]; if (!d) return;
+    clearTimeout(timers[i]);
+    d.seq = (d.seq || 0) + 1;
+    if (!d.c || (d.t || '').trim().length < 10) { d.q = null; d.qm = ''; return; }
+    var seq = d.seq, text = d.t, choice = d.c;
+    d.q = 'checking'; d.qm = 'AI가 까닭을 읽고 있어요…';
+    function finish(ok, msg) {
+      if (state.dec[i] !== d || d.seq !== seq) return;
+      d.q = ok ? 'ok' : 'weak';
+      d.qm = ok ? '✓ ' + (msg || 'AI가 읽어 보니 구체적인 까닭이에요.') : 'AI의 되물음: ' + (msg || '한 줄 더 구체적으로 적어 봐요.');
+      updateCard(i); updateProgress();
+    }
+    timers[i] = setTimeout(function () {
+      if (state.dec[i] !== d || d.seq !== seq) return;
+      var weak = localWeak(text, choice);
+      if (weak) { finish(false, weak); return; }
+      var it = state.model.items[i];
+      run('checkReason', [{ code: state.cur.code, sid: $('#sid').value.trim(), original: it.o || '', revised: it.r, choice: choice, reason: text }],
+        function (r) { finish(!!(r && r.ok), r && r.message); },
+        function () { finish(true, '까닭을 받았어요. (AI 확인은 건너뛰었어요.)'); });
+    }, 800);
+  }
+  function isDone(i) { var d = state.dec[i]; return !!(d && d.c && d.t && d.t.trim().length >= 10 && d.q === 'ok'); }
+  function remaining() {
+    var out = [];
+    state.model.items.forEach(function (_, i) {
+      var d = state.dec[i], len = d && d.t ? d.t.trim().length : 0;
+      if (!d || !d.c) out.push({ i: i, msg: (i + 1) + '번(동의 여부 선택)' });
+      else if (len < 10) out.push({ i: i, msg: (i + 1) + '번(까닭 ' + (10 - len) + '자 더)' });
+      else if (d.q === 'weak') out.push({ i: i, msg: (i + 1) + '번(까닭을 더 구체적으로)' });
+      else if (d.q !== 'ok') out.push({ i: i, msg: (i + 1) + '번(AI가 확인 중)' });
+    });
+    return out;
+  }
+  function updateCard(i) {
+    var d = state.dec[i] || {}, card = $('#u' + i), ta = $('#r' + i);
+    if (!card) return;
+    $$('.choice button', card).forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.c === d.c)); });
+    ta.disabled = !d.c;
+    ta.placeholder = d.c ? (d.c === 'agree' ? '왜 동의하는지 적어요. (한국어나 영어)' : '왜 내 표현을 지키고 싶은지 적어요. (한국어나 영어)') : '먼저 동의 여부를 골라요.';
+    var len = (d.t || '').trim().length, ct = $('#ct' + i);
+    ct.textContent = len + ' / 10자' + (len >= 10 ? ' · 글자 수 충분' : (d.c ? ' · ' + (10 - len) + '자 더 적어요' : ' · 먼저 동의 여부를 골라요'));
+    ct.classList.toggle('ok', len >= 10);
+    var done = isDone(i);
+    card.classList.toggle('done', done); card.classList.toggle('agree', d.c === 'agree'); card.classList.toggle('keep', d.c === 'keep');
+    $('#st' + i).textContent = done ? (d.c === 'agree' ? '동의 · 판단 완료' : '동의 안 함 · 판단 완료') : (d.c ? (d.q === 'weak' ? '까닭을 더 적어요' : d.q === 'checking' ? 'AI가 확인 중' : '까닭을 적어요') : '판단 전');
+    var qm = $('#qm' + i); qm.className = 'qmsg ' + (d.q || ''); qm.textContent = d.qm || '';
+  }
+  function setStarters(i) {
+    var d = state.dec[i] || {}, box = $('#sg' + i);
+    box.innerHTML = d.c ? STARTERS[d.c].map(function (s, k) { return '<button type="button" data-k="' + k + '">' + esc(s.trim()) + '…</button>'; }).join('') : '';
+  }
+  function updateProgress() {
+    var n = state.model.items.length, done = 0;
+    for (var i = 0; i < n; i++) if (isDone(i)) done++;
+    $('#progTxt').textContent = done + ' / ' + n;
+    $('#barFill').style.width = (n ? done / n * 100 : 100) + '%';
+    var rem = remaining(), ready = rem.length === 0;
+    $('#to3').setAttribute('aria-disabled', String(!ready));
+    $('#to3note').textContent = ready ? '모두 판단했어요. 다음 단계로 가요.' : '아직 남은 곳: ' + rem.map(function (r) { return r.msg; }).join(', ');
+    if (ready && state.max < 3) { state.max = 3; setStep(state.step); }
+  }
+  $('#units').addEventListener('click', function (e) {
+    var card = e.target.closest('.unit'); if (!card) return;
+    var i = +card.dataset.i, d = state.dec[i] = state.dec[i] || { c: null, t: '' };
+    var cb = e.target.closest('[data-c]'), sb = e.target.closest('.starters button');
+    if (cb) {
+      d.c = cb.dataset.c; scheduleCheck(i); setStarters(i); updateCard(i); updateProgress();
+      var ta = $('#r' + i); if (!ta.value) ta.focus();
+    } else if (sb && d.c) {
+      var ta2 = $('#r' + i); ta2.value = (ta2.value ? ta2.value + ' ' : '') + STARTERS[d.c][+sb.dataset.k];
+      d.t = ta2.value; scheduleCheck(i); updateCard(i); updateProgress(); ta2.focus();
+      ta2.setSelectionRange(ta2.value.length, ta2.value.length);
+    }
+  });
+  $('#units').addEventListener('input', function (e) {
+    var ta = e.target.closest('textarea'); if (!ta) return;
+    var i = +ta.closest('.unit').dataset.i, d = state.dec[i] = state.dec[i] || { c: null, t: '' };
+    d.t = ta.value; scheduleCheck(i); updateCard(i); updateProgress();
+  });
+  $('#to3').addEventListener('click', function () {
+    var rem = remaining();
+    if (!rem.length) { setStep(3); return; }
+    var card = $('#u' + rem[0].i);
+    card.scrollIntoView({ block: 'center' });
+    card.classList.add('flash');
+    setTimeout(function () { card.classList.remove('flash'); }, 1800);
+    var d = state.dec[rem[0].i], target = d && d.c ? $('#r' + rem[0].i) : $('.choice button', card);
+    if (target) target.focus({ preventScroll: true });
+  });
+
+  function mergedParas() {
+    return state.model.structure.map(function (p) {
+      return p.map(function (seg) {
+        if (seg.item < 0) return { t: 'plain', o: seg.o };
+        var d = state.dec[seg.item];
+        if (d && d.c === 'agree') return { t: 'agree', o: seg.o, r: seg.r };
+        return { t: 'keep', o: seg.o };
+      });
+    });
+  }
+  function mergedText() { return mergedParas().map(function (p) { return p.map(function (s) { return s.t === 'agree' ? s.r : s.o; }).filter(Boolean).join(' '); }).join('\n\n'); }
+  function counts() {
+    var a = 0, k = 0, n = state.model.items.length;
+    for (var i = 0; i < n; i++) { var d = state.dec[i]; if (d && d.c === 'agree') a++; else if (d && d.c === 'keep') k++; }
+    return { a: a, k: k, n: n };
+  }
+  function renderStep3() {
+    var c = counts();
+    $('#tally').innerHTML = '<span class="t-ok">동의 ' + c.a + '곳</span><span class="t-keep">동의 안 함 ' + c.k + '곳</span>';
+    $('#preview').innerHTML = mergedParas().map(function (p) {
+      return '<p>' + p.map(function (s) {
+        if (s.t === 'agree') return toHtml(diffPair(s.o, s.r).b, 'add');
+        if (s.t === 'keep') return s.o ? '<span class="kept">' + esc(s.o) + '</span>' : '';
+        return esc(s.o);
+      }).filter(Boolean).join(' ') + '</p>';
+    }).join('');
+    if (!state.edited) $('#finalText').value = mergedText();
+  }
+  $('#finalText').addEventListener('input', function () { state.edited = true; });
+  $('#resetFinal').addEventListener('click', function () { state.edited = false; $('#finalText').value = mergedText(); });
+  $('#readAloud').addEventListener('change', function (e) {
+    $('#submit').setAttribute('aria-disabled', String(!e.target.checked));
+    $('#submitNote').textContent = e.target.checked ? '제출할 수 있어요.' : '소리 내어 읽어 보면 제출할 수 있어요.';
+  });
+  function decisionList() {
+    return state.model.items.map(function (it, i) {
+      var d = state.dec[i] || {};
+      return { original: it.o || '', revised: it.r, cats: it.tags.map(function (t) { return t.cat; }), choice: d.c || 'keep', reason: d.t || '', reasonCheck: d.q || '' };
+    });
+  }
+  $('#submit').addEventListener('click', function () {
+    var st = $('#submitStatus');
+    if ($('#submit').getAttribute('aria-disabled') === 'true') { $('#readAloud').focus(); st.className = 'status err'; st.textContent = '먼저 최종 글을 소리 내어 읽고 체크해요.'; return; }
+    if (state.busy) return;
+    state.busy = true; $('#submit').setAttribute('aria-disabled', 'true');
+    st.className = 'status'; st.textContent = '제출하고 있어요…';
+    var payload = { code: state.cur.code, sid: $('#sid').value.trim(), name: $('#sname').value.trim(), draft: $('#draft').value, finalText: $('#finalText').value, edited: state.edited, items: decisionList() };
+    run('submit', [payload], function (r) {
+      state.busy = false; $('#submit').setAttribute('aria-disabled', 'false');
+      if (!r || !r.ok) { st.className = 'status err'; st.textContent = (r && r.error) || '제출하지 못했어요. 다시 눌러 봐요.'; return; }
+      st.textContent = '';
+      state.submitted = true; state.max = 4;
+      renderBars(); renderCoach(); setStep(4);
+      loadCoach();
+    }, function (m) { state.busy = false; $('#submit').setAttribute('aria-disabled', 'false'); st.className = 'status err'; st.textContent = m; });
+  });
+
+  function loadCoach() {
+    state.coach = null; state.coachErr = ''; renderCoach();
+    run('coach', [{ code: state.cur.code, sid: $('#sid').value.trim(), finalText: $('#finalText').value, decisions: decisionList() }],
+      function (r) { if (r && r.ok) state.coach = r; else state.coachErr = (r && r.error) || '연습 문제를 불러오지 못했어요.'; renderCoach(); },
+      function (m) { state.coachErr = m; renderCoach(); });
+  }
+  function renderCoach() {
+    var lv = state.intensity, ng = lv === 'weak' ? 3 : 2, nf = lv === 'weak' ? 2 : lv === 'normal' ? 3 : 4, nq = lv === 'weak' ? 0 : lv === 'normal' ? 2 : 3;
+    var html = '', c = state.coach;
+    if (c) {
+      html += '<div class="cards">';
+      c.good.slice(0, ng).forEach(function (g) { html += '<div class="card good"><span class="tagline">잘한 점</span><p>' + esc(g) + '</p></div>'; });
+      c.focus.slice(0, nf).forEach(function (f) { html += '<div class="card focus"><span class="tagline">다음에 신경 쓸 점</span><h3>' + esc(f.t) + '</h3><p>' + esc(f.d) + '</p></div>'; });
+      html += '</div>';
+    } else if (state.coachErr) {
+      html += '<div class="card err-card"><p class="err">' + esc(state.coachErr) + '</p><div class="actions"><button class="btn ghost" id="retryCoach" type="button">다시 불러오기</button></div></div>';
+    } else {
+      html += '<p class="status"><span class="dots"><span></span><span></span><span></span></span> AI가 최종 글을 다시 읽고 있어요.</p>';
+    }
+    var kept = state.model.items.filter(function (it, i) { return state.dec[i] && state.dec[i].c === 'keep'; });
+    if (kept.length) {
+      html += '<h3>동의하지 않은 곳, 한 번 더 생각해 봐요</h3><div class="cards">' + kept.map(function (it) {
+        return '<div class="card recheck"><span class="tagline">' + (it.o ? '내가 지킨 표현' : '내가 더하지 않은 문장') + '</span><p class="en">' + esc(it.o || it.r) + '</p><p>' + esc(it.recheck) + '</p></div>';
+      }).join('') + '</div>';
+    }
+    if (c && nq && c.quiz.length) {
+      html += '<h3>연습 문제</h3><div class="cards">' + c.quiz.slice(0, nq).map(function (q, k) {
+        return '<div class="card q" data-q="' + k + '"><p class="en">' + esc(q.q) + '</p><div class="opts">' + q.opts.map(function (o) { return '<button type="button" data-o="' + esc(o) + '">' + esc(o) + '</button>'; }).join('') + '</div><p class="fb" aria-live="polite"></p></div>';
+      }).join('') + '</div>';
+    }
+    $('#coach').innerHTML = html;
+  }
+  function renderBars() {
+    var tally = {};
+    state.model.items.forEach(function (it, i) {
+      var d = state.dec[i]; if (!d) return;
+      var seen = {};
+      it.tags.forEach(function (t) { if (seen[t.cat]) return; seen[t.cat] = 1; var r = tally[t.cat] = tally[t.cat] || { a: 0, k: 0 }; if (d.c === 'agree') r.a++; else r.k++; });
+    });
+    var cats = Object.keys(tally), max = 1;
+    cats.forEach(function (c) { max = Math.max(max, tally[c].a + tally[c].k); });
+    $('#bars').innerHTML = cats.length ? cats.map(function (c) {
+      var r = tally[c], tot = r.a + r.k;
+      return '<div class="brow"><span><span class="chip ' + (CLS[c] || 'word') + '">' + esc(c) + '</span></span><div class="btrack" title="동의 ' + r.a + ', 동의 안 함 ' + r.k + '"><i class="a" style="width:' + (r.a / max * 100) + '%"></i><i class="k" style="width:' + (r.k / max * 100) + '%"></i></div><span>' + tot + '곳</span></div>';
+    }).join('') + '<p class="note"><mark class="add">초록</mark> 동의한 곳 · <span class="kept">주황</span> 동의 안 함</p>' : '<p class="note">AI가 고친 곳이 없었어요.</p>';
+  }
+  $$('[data-i]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.intensity = b.dataset.i;
+      $$('[data-i]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      renderCoach();
+    });
+  });
+  $('#coach').addEventListener('click', function (e) {
+    if (e.target.closest('#retryCoach')) { loadCoach(); return; }
+    var ob = e.target.closest('[data-o]'); if (!ob || !state.coach) return;
+    var card = ob.closest('.q'), q = state.coach.quiz[+card.dataset.q], right = ob.dataset.o === q.ans;
+    $$('.opts button', card).forEach(function (b) { b.classList.remove('right', 'wrong'); });
+    ob.classList.add(right ? 'right' : 'wrong');
+    var fb = $('.fb', card); fb.textContent = right ? q.ok : q.no; fb.style.color = right ? 'var(--ok)' : 'var(--del)';
+  });
+
+  var T = { pin: '', codes: [], editing: null, arm: null, unit: 'sentence' };
+  var CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  function showStudentView() {
+    T.pin = '';
+    $$('.tp').forEach(function (p) { p.hidden = true; });
+    $('.stepper').hidden = false; $('.foot').hidden = false;
+    setStep(state.step);
+  }
+  function showTeacher(which) {
+    $$('.sp').forEach(function (p) { p.hidden = true; });
+    $('.stepper').hidden = true; $('.foot').hidden = true;
+    $('#pl').hidden = which !== 'login'; $('#pt').hidden = which !== 'main';
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+  $('#toTeacher').addEventListener('click', function () { $('#pin').value = ''; $('#loginMsg').textContent = ''; showTeacher('login'); $('#pin').focus(); });
+  $$('[data-exit]').forEach(function (b) { b.addEventListener('click', showStudentView); });
+  $('#loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var pin = $('#pin').value, msg = $('#loginMsg');
+    msg.className = 'status'; msg.textContent = '확인하고 있어요…';
+    run('teacherLogin', [pin], function (r) {
+      T.pin = pin; msg.textContent = '';
+      $('#sheetLink').href = r.sheetUrl;
+      showTeacher('main'); loadCodes();
+    }, function (m) { msg.className = 'status err'; msg.textContent = m; });
+  });
+  function setCodes(list) { T.codes = list || []; renderCodes(); renderSubSelect(); }
+  function loadCodes() { run('teacherListCodes', [T.pin], setCodes, function (m) { $('#tmsg').className = 'status err'; $('#tmsg').textContent = m; }); }
+  function tUnit(u) { T.unit = u; $$('[data-tu]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.tu === u)); }); }
+  $$('[data-tu]').forEach(function (b) { b.addEventListener('click', function () { tUnit(b.dataset.tu); }); });
+  $('#genCode').addEventListener('click', function () {
+    var c, i, tries = 0;
+    do { c = 'ENG-'; for (i = 0; i < 3; i++) c += CHARS.charAt(Math.floor(Math.random() * CHARS.length)); tries++; }
+    while (T.codes.some(function (x) { return x.code === c; }) && tries < 20);
+    $('#tcode').value = c;
+  });
+  function resetForm() { $('#codeForm').reset(); T.editing = null; tUnit('sentence'); $('#saveCode').textContent = '코드 만들기'; $('#cancelEdit').hidden = true; }
+  $('#cancelEdit').addEventListener('click', function () { resetForm(); $('#tmsg').textContent = ''; });
+  $('#codeForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var msg = $('#tmsg'), entry = { code: $('#tcode').value, cls: $('#tcls').value, topic: $('#ttopic').value, hint: $('#thint').value, unit: T.unit, easy: $('#teasy').checked, active: true };
+    if (!entry.code.trim() || !entry.topic.trim()) { msg.className = 'status err'; msg.textContent = '코드와 글감을 모두 적어요.'; return; }
+    msg.className = 'status'; msg.textContent = '저장하고 있어요…';
+    run('teacherSaveCode', [T.pin, entry, T.editing], function (list) {
+      var saved = entry.code.replace(/\s+/g, '').toUpperCase();
+      resetForm(); setCodes(list);
+      msg.className = 'status good'; msg.textContent = saved + ' 코드를 저장했어요. 학생 화면에서 입력해 보세요.';
+    }, function (m) { msg.className = 'status err'; msg.textContent = m; });
+  });
+  function renderCodes() {
+    $('#codeTable').innerHTML = '<thead><tr><th>코드</th><th>반</th><th>글감</th><th>피드백 단위</th><th>쉬운 설명</th><th></th></tr></thead><tbody>' +
+      T.codes.map(function (c) {
+        var k = esc(c.code);
+        return '<tr><td><b>' + k + '</b></td><td>' + esc(c.cls) + '</td><td class="en">' + esc(c.topic) + '</td><td>' + (c.unit === 'paragraph' ? '문단마다' : '문장마다') + '</td><td>' + (c.easy ? '켜짐' : '꺼짐') + '</td>' +
+          '<td><button class="tbtn" type="button" data-act="edit" data-code="' + k + '">수정</button> <button class="tbtn danger" type="button" data-act="del" data-code="' + k + '">' + (T.arm === c.code ? '정말 삭제' : '삭제') + '</button></td></tr>';
+      }).join('') + '</tbody>';
+  }
+  $('#codeTable').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    var code = b.dataset.code, act = b.dataset.act, c = T.codes.filter(function (x) { return x.code === code; })[0];
+    if (act !== 'del') T.arm = null;
+    if (act === 'edit' && c) {
+      $('#tcode').value = c.code; $('#tcls').value = c.cls; $('#ttopic').value = c.topic; $('#thint').value = c.hint;
+      tUnit(c.unit); $('#teasy').checked = c.easy; T.editing = c.code;
+      $('#saveCode').textContent = '수정 저장'; $('#cancelEdit').hidden = false; $('#tmsg').textContent = ''; $('#tcode').focus();
+    } else if (act === 'del') {
+      if (T.arm === code) {
+        T.arm = null;
+        run('teacherDeleteCode', [T.pin, code], setCodes, function (m) { $('#tmsg').className = 'status err'; $('#tmsg').textContent = m; });
+      } else { T.arm = code; renderCodes(); }
+    }
+  });
+  function renderSubSelect() {
+    var sel = $('#subCode'), cur = sel.value;
+    sel.innerHTML = T.codes.map(function (c) { return '<option value="' + esc(c.code) + '">' + esc(c.code) + ' · ' + esc(c.topic) + '</option>'; }).join('');
+    if (cur) sel.value = cur;
+  }
+  $('#loadSubs').addEventListener('click', function () {
+    var msg = $('#subMsg'), code = $('#subCode').value;
+    if (!code) { msg.className = 'status err'; msg.textContent = '코드를 먼저 만들어요.'; return; }
+    msg.className = 'status'; msg.textContent = '불러오고 있어요…';
+    run('teacherSubmissions', [T.pin, code], function (rows) {
+      msg.textContent = rows.length + '건';
+      $('#subTable').innerHTML = rows.length ? '<thead><tr><th>시간</th><th>학번</th><th>이름</th><th>동의</th><th>동의 안 함</th><th>직접 고침</th><th>가장 많은 유형</th></tr></thead><tbody>' +
+        rows.map(function (r) { return '<tr><td>' + esc(r.time) + '</td><td>' + esc(r.sid) + '</td><td>' + esc(r.name) + '</td><td>' + r.agree + '</td><td>' + r.keep + '</td><td>' + (r.edited ? '예' : '아니요') + '</td><td>' + esc(r.top) + '</td></tr>'; }).join('') + '</tbody>' : '';
+    }, function (m) { msg.className = 'status err'; msg.textContent = m; });
+  });
+
+  var lastSec = '';
+  $$('[data-ins]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var ta = $('#draft'), sec = b.dataset.sec, v = ta.value;
+      if (v && !/\s$/.test(v)) v += (sec !== lastSec ? '\n' : ' ');
+      else if (v && sec !== lastSec && !/\n$/.test(v)) v = v.replace(/[ \t]+$/, '') + '\n';
+      ta.value = (v + b.dataset.ins).slice(0, 3000);
+      lastSec = sec; ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  });
+
+  refreshStart(); draftCount();
+  setStep(1);
+})();
+</script>
+</body>
+</html>
